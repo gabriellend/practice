@@ -10,54 +10,64 @@ import {
 import { useWindowDimensions } from "react-native";
 import { AntDesign, Ionicons, FontAwesome } from "@expo/vector-icons";
 
+// initial Snome image that is loaded
 const image = {
   uri: "https://snome.s3.us-east-2.amazonaws.com/langham_news_2.jpg",
 };
 
-const SnomePhotos = async (id) => {
-  try {
-    const response = await fetch(`http://localhost:3000/snome/${id}/photos`);
-    const json = await response.json();
-    setData(json);
-  } catch (error) {
-    console.error(error);
-  }
-};
+// There are a couple things commented out here that we were playing with when trying to get multiple photos to load and to be able to scroll through them when pushing on the arrows. Some other comments are just descriptive.
+
+// const getPhotos = async (id) => {
+//   try {
+//     const response = await fetch(`http://localhost:3000/snome/${id}/photos`);
+//     const json = await response.json();
+//     setData(json);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
 
 const SnomeDescription = () => {
-  const [photos, setData] = useState([]);
+  // const [photos, setData] = useState([]);
 
   const window = useWindowDimensions();
 
-  const scrollPhoto = () => {};
+  const scrollPhoto = () => {
+    console.log("this worked!");
+  };
 
-  useEffect(() => {
-    getPhotos();
-  }, []);
+  // useEffect(() => {
+  //   getPhotos();
+  // }, []);
 
-  console.log(photos);
-  const createLike = () => {
+  const createLikeOrMatch = () => {
     console.log("this worked too");
   };
 
   return (
+    // parent container for the whole screen
     <ScrollView
+      // "style" is for the ScrollView container itself
       style={styles.scrollView}
+      // "contentContainerStyle" apparently comes with ScrollView and is for the content inside the container. I guess it's like a container within a container.
       contentContainerStyle={styles.contentContainer}
     >
+      {/* for the top navigation back arrow */}
       <AntDesign
         name="leftcircleo"
         size={34}
         color="black"
         style={{ alignSelf: "flex-start", marginTop: 10 }}
       />
+      {/* container for the photos */}
       <View style={styles.photoContainer}>
-        {/* <View style={styles.photoGallery}> */}
+        {/* the current photo itself */}
         <ImageBackground
           source={image}
           resizeMode="cover"
           style={{ flex: 1, justifyContent: "center" }}
         ></ImageBackground>
+        {/* container for the icons on top of the photo */}
         <View
           style={{
             position: "absolute",
@@ -68,6 +78,7 @@ const SnomeDescription = () => {
             backgroundColor: "transparent",
           }}
         >
+          {/* for the left arrow on the photo */}
           <TouchableOpacity
             onPress={scrollPhoto}
             style={{
@@ -76,6 +87,7 @@ const SnomeDescription = () => {
           >
             <AntDesign name="left" size={34} color="black" />
           </TouchableOpacity>
+          {/* for the right arrow on the photo */}
           <TouchableOpacity style={{ position: "absolute", margin: 330 }}>
             <AntDesign
               onPress={scrollPhoto}
@@ -84,6 +96,7 @@ const SnomeDescription = () => {
               color="black"
             />
           </TouchableOpacity>
+          {/* for the like button on the photo */}
           <TouchableOpacity
             style={{
               alignSelf: "flex-end",
@@ -92,7 +105,7 @@ const SnomeDescription = () => {
             }}
           >
             <Ionicons
-              onPress={createLike}
+              onPress={createLikeOrMatch}
               name="heart-circle-outline"
               size={64}
               color="black"
@@ -100,7 +113,7 @@ const SnomeDescription = () => {
           </TouchableOpacity>
         </View>
       </View>
-
+      {/* Snome title under the photos */}
       <Text
         style={{
           width: "100%",
@@ -111,8 +124,10 @@ const SnomeDescription = () => {
       >
         Gorgeous 2 bedroom with views
       </Text>
+      {/* container for all the Snome info/stats */}
       <View style={styles.descriptionContainer}>
         <Text style={styles.descriptionTextHeaders}>
+          {/* "&nbsp;" is how you add spaces */}
           4.75&nbsp;&nbsp;
           <FontAwesome name="star" size={20} color="black" />
           <FontAwesome name="star" size={20} color="black" />
@@ -131,10 +146,13 @@ const SnomeDescription = () => {
         </Text>
         <Text style={styles.descriptionTextHeaders}>
           Mountain Access{"\n"}
-          <Text style={{ fontWeight: "normal" }}>8 mins Ski-in</Text>
+          <Text style={{ fontWeight: "normal" }}>8 mins/Ski-in</Text>
         </Text>
       </View>
-      <View style={styles.ownerContainer}></View>
+      {/* container for the Snome host info */}
+      <View style={styles.hostContainer}></View>
+      {/* container for the Snome reviews */}
+      <View style={styles.reviewContainer}></View>
     </ScrollView>
   );
 };
@@ -169,16 +187,6 @@ const styles = StyleSheet.create({
     height: 250,
     width: "100%",
   },
-  // photoGallery: {
-  //   flex: 1,
-  //   flexDirection: "row",
-  //   alignItems: "center",
-  //   height: 250,
-  //   width: "100%",
-  //   backgroundColor: "white",
-  //   borderTopWidth: 1,
-  //   borderColor: "black",
-  // },
   descriptionContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -192,10 +200,8 @@ const styles = StyleSheet.create({
     width: "50%",
     fontWeight: "bold",
   },
-  ownerContainer: {
-    flex: 3,
-    backgroundColor: "yellow",
-  },
+  hostContainer: {},
+  reviewContainer: {},
 });
 
 export default SnomeDescription;
